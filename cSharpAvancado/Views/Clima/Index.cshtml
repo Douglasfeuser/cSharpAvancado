@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Clima";
+}
+<div class="text-center">
+    <h1 class="display-4">Previsão do Tempo</h1>
+    <br/>
+    <button id="btnObterClima">Obter Clima</button>
+    <br/>
+    <div id="clima-container">
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#btnObterClima").click(function() {
+                $.ajax({
+                    url: '/Clima/GetClima',
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+                        let html = `
+                            <p>Cidade: ${data.name}</p>
+                            <p>Temperatura: ${data.main.temp}</p>
+                            <p>Condição: ${data.weather[0].description}</p>
+                        `;
+                        $("#clima-container").html(html);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $("#clima-container").html("<p>Erro ao obter previsão do tempo.</p>");
+                    }
+                });
+            });
+        });
+    </script>
+}
